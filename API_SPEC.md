@@ -23,9 +23,12 @@
 | GET | /api/v1/mentee/columns/{columnId} | 칼럼 상세 |
 | GET | /api/v1/mentee/profile | 프로필 조회 |
 | GET | /api/v1/mentee/achievement | 과목별 달성률 |
-| GET | /api/v1/mentee/weekly-reports | 주간 리포트 목록 |
-| GET | /api/v1/mentee/weekly-reports/{reportId} | 주간 리포트 상세 |
+| GET | /api/v1/mentee/monthly-reports | 월간 리포트 목록 |
+| GET | /api/v1/mentee/monthly-reports/{reportId} | 월간 리포트 상세 |
 | POST | /api/v1/mentee/comments | 코멘트/질문 등록 |
+| POST | /api/v1/mentee/planner/{date}/complete | 플래너 마감/피드백 요청 |
+| POST | /api/v1/mentee/zoom-meetings | Zoom 미팅 신청 |
+| GET | /api/v1/mentee/zoom-meetings | Zoom 미팅 신청 내역 |
 
 ### 멘토 (Mentor)
 | Method | Endpoint | 설명 |
@@ -43,7 +46,9 @@
 | POST | /api/v1/mentor/students/{studentId}/solutions | 솔루션 등록 |
 | PUT | /api/v1/mentor/students/{studentId}/solutions/{solutionId} | 솔루션 수정 |
 | DELETE | /api/v1/mentor/students/{studentId}/solutions/{solutionId} | 솔루션 삭제 |
-| POST | /api/v1/mentor/students/{studentId}/weekly-reports | 주간 리포트 작성 |
+| POST | /api/v1/mentor/students/{studentId}/monthly-reports | 월간 리포트 작성 |
+| GET | /api/v1/mentor/notifications | 알림 목록 조회 |
+| PATCH | /api/v1/mentor/zoom-meetings/{meetingId}/confirm | Zoom 미팅 확인 |
 
 ### 파일 (File)
 | Method | Endpoint | 설명 |

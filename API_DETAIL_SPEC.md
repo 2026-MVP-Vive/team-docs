@@ -745,12 +745,12 @@ GET /api/v1/mentee/achievement
 
 ---
 
-### 3.14 주간 학습리포트 목록 조회
+### 3.14 월간 학습리포트 목록 조회
 
 **Endpoint**
 
 ```
-GET /api/v1/mentee/weekly-reports
+GET /api/v1/mentee/monthly-reports
 ```
 
 **Response**
@@ -762,18 +762,18 @@ GET /api/v1/mentee/weekly-reports
     "reports": [
       {
         "id": 1,
-        "week": 4,
-        "title": "4주차 (25.12.21~27)",
-        "startDate": "2024-12-21",
-        "endDate": "2024-12-27",
+        "month": "2025-01",
+        "title": "1월 학습 리포트",
+        "startDate": "2025-01-01",
+        "endDate": "2025-01-31",
         "isAvailable": true
       },
       {
         "id": 2,
-        "week": 3,
-        "title": "3주차 (25.12.14~20)",
-        "startDate": "2024-12-14",
-        "endDate": "2024-12-20",
+        "month": "2024-12",
+        "title": "12월 학습 리포트",
+        "startDate": "2024-12-01",
+        "endDate": "2024-12-31",
         "isAvailable": true
       }
     ]
@@ -783,18 +783,18 @@ GET /api/v1/mentee/weekly-reports
 
 ---
 
-### 3.15 주간 학습리포트 상세 조회
+### 3.15 월간 학습리포트 상세 조회
 
 **Endpoint**
 
 ```
-GET /api/v1/mentee/weekly-reports/{reportId}
+GET /api/v1/mentee/monthly-reports/{reportId}
 ```
 
 **Path Parameters**
 | 파라미터 | 타입 | 필수 | 설명 |
 |----------|------|------|------|
-| reportId | Long | O | 리포트 ID |
+| reportId | Long | O | 월간 리포트 ID |
 
 **Response**
 
@@ -863,6 +863,117 @@ POST /api/v1/mentee/comments
     "content": "오늘 국어 문제 풀다가 막히는 부분이 있었어요",
     "date": "2025-01-27",
     "createdAt": "2025-01-27T15:00:00"
+  }
+}
+```
+
+---
+
+### 3.17 플래너 마감/피드백 요청
+
+멘티가 하루 할 일을 모두 마치고 멘토에게 피드백을 요청합니다.
+
+**Endpoint**
+
+```
+POST /api/v1/mentee/planner/{date}/complete
+```
+
+**Path Parameters**
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| date | String | O | 마감할 날짜 (YYYY-MM-DD) |
+
+**Response**
+
+```json
+{
+  "success": true,
+  "data": {
+    "date": "2025-01-27",
+    "completedAt": "2025-01-27T22:15:00",
+    "status": "COMPLETED"
+  }
+}
+```
+
+---
+
+### 3.18 Zoom 미팅 신청
+
+멘티가 멘토에게 Zoom 미팅을 신청합니다.
+
+**Endpoint**
+
+```
+POST /api/v1/mentee/zoom-meetings
+```
+
+**Request Body**
+| 필드 | 타입 | 필수 | 설명 |
+|------|------|------|------|
+| preferredDate | String | O | 희망 날짜 (YYYY-MM-DD) |
+| preferredTime | String | O | 희망 시간 (HH:mm) |
+
+**Response**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "preferredDate": "2025-01-29",
+    "preferredTime": "20:00",
+    "status": "PENDING",
+    "createdAt": "2025-01-27T18:30:00"
+  }
+}
+```
+
+**Status 종류**
+- `PENDING`: 대기중
+- `CONFIRMED`: 멘토 확인 완료
+- `CANCELLED`: 취소됨
+
+---
+
+### 3.19 Zoom 미팅 신청 내역 조회
+
+**Endpoint**
+
+```
+GET /api/v1/mentee/zoom-meetings
+```
+
+**Query Parameters**
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| status | String | X | 상태 필터 (PENDING, CONFIRMED, CANCELLED) |
+
+**Response**
+
+```json
+{
+  "success": true,
+  "data": {
+    "meetings": [
+      {
+        "id": 1,
+        "preferredDate": "2025-01-29",
+        "preferredTime": "20:00",
+        "status": "PENDING",
+        "createdAt": "2025-01-27T18:30:00",
+        "confirmedAt": null
+      },
+      {
+        "id": 2,
+        "preferredDate": "2025-01-22",
+        "preferredTime": "19:00",
+        "status": "CONFIRMED",
+        "createdAt": "2025-01-20T10:00:00",
+        "confirmedAt": "2025-01-20T11:30:00"
+      }
+    ]
   }
 }
 ```
@@ -1413,12 +1524,12 @@ DELETE /api/v1/mentor/students/{studentId}/solutions/{solutionId}
 
 ---
 
-### 4.14 주간 학습리포트 작성
+### 4.14 월간 학습리포트 작성
 
 **Endpoint**
 
 ```
-POST /api/v1/mentor/students/{studentId}/weekly-reports
+POST /api/v1/mentor/students/{studentId}/monthly-reports
 ```
 
 **Path Parameters**
@@ -1429,8 +1540,7 @@ POST /api/v1/mentor/students/{studentId}/weekly-reports
 **Request Body**
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|------|------|
-| startDate | String | O | 주차 시작일 (YYYY-MM-DD) |
-| endDate | String | O | 주차 종료일 (YYYY-MM-DD) |
+| month | String | O | 대상 월 (YYYY-MM) |
 | title | String | O | 리포트 제목 |
 | summary | String | X | 요약 |
 | overallFeedback | String | O | 전체 피드백 |
@@ -1453,6 +1563,94 @@ POST /api/v1/mentor/students/{studentId}/weekly-reports
     "startDate": "2024-12-28",
     "endDate": "2025-01-03",
     "createdAt": "2025-01-04T10:00:00"
+  }
+}
+```
+
+---
+
+### 4.15 알림 목록 조회
+
+멘토의 알림 목록을 조회합니다. (Zoom 신청, 플래너 마감 등)
+
+**Endpoint**
+
+```
+GET /api/v1/mentor/notifications
+```
+
+**Query Parameters**
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| unreadOnly | Boolean | X | 미확인만 조회 (기본값: false) |
+
+**Response**
+
+```json
+{
+  "success": true,
+  "data": {
+    "notifications": [
+      {
+        "id": 1,
+        "type": "ZOOM_REQUEST",
+        "title": "Zoom 미팅 신청",
+        "message": "민유진 — 1/29(수) 20:00",
+        "relatedId": 1,
+        "isRead": false,
+        "createdAt": "2025-01-27T18:30:00",
+        "studentName": "민유진"
+      },
+      {
+        "id": 2,
+        "type": "PLANNER_COMPLETED",
+        "title": "플래너 마감",
+        "message": "민유진 — 1/27(목) 22:15 마감 완료",
+        "relatedId": null,
+        "isRead": true,
+        "createdAt": "2025-01-27T22:15:00",
+        "studentName": "민유진"
+      }
+    ],
+    "unreadCount": 1
+  }
+}
+```
+
+**알림 타입**
+- `ZOOM_REQUEST`: Zoom 미팅 신청
+- `PLANNER_COMPLETED`: 플래너 마감
+- `TASK_SUBMITTED`: 과제 제출
+
+---
+
+### 4.16 Zoom 미팅 확인
+
+멘티의 Zoom 미팅 신청을 확인합니다.
+
+**Endpoint**
+
+```
+PATCH /api/v1/mentor/zoom-meetings/{meetingId}/confirm
+```
+
+**Path Parameters**
+| 파라미터 | 타입 | 필수 | 설명 |
+|----------|------|------|------|
+| meetingId | Long | O | Zoom 미팅 ID |
+
+**Response**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "studentName": "민유진",
+    "preferredDate": "2025-01-29",
+    "preferredTime": "20:00",
+    "status": "CONFIRMED",
+    "confirmedAt": "2025-01-28T09:00:00"
   }
 }
 ```
