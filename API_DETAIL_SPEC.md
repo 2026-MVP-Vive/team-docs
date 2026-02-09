@@ -884,6 +884,11 @@ POST /api/v1/mentee/planner/{date}/complete
 |----------|------|------|------|
 | date | String | O | 마감할 날짜 (YYYY-MM-DD) |
 
+**Request Body**
+| 필드 | 타입 | 필수 | 설명 |
+|------|------|------|------|
+| tasks | Number[] | O | 선택된 할일 리스트 |
+
 **Response**
 
 ```json
@@ -931,6 +936,7 @@ POST /api/v1/mentee/zoom-meetings
 ```
 
 **Status 종류**
+
 - `PENDING`: 대기중
 - `CONFIRMED`: 멘토 확인 완료
 - `CANCELLED`: 취소됨
@@ -1055,12 +1061,14 @@ GET /api/v1/mentor/students/{studentId}/tasks
     "studentId": 1,
     "studentName": "민유진",
     "date": "2025-01-27",
+    "isCompleted": false,
     "tasks": [
       {
         "id": 1,
         "title": "수능완성 5회 1~11번",
         "subject": "KOREAN",
         "subjectName": "국어",
+        "isChecked": false,
         "goal": {
           "id": 10,
           "title": "문학 개념어 정리"
@@ -1618,6 +1626,7 @@ GET /api/v1/mentor/notifications
 ```
 
 **알림 타입**
+
 - `ZOOM_REQUEST`: Zoom 미팅 신청
 - `PLANNER_COMPLETED`: 플래너 마감
 - `TASK_SUBMITTED`: 과제 제출
